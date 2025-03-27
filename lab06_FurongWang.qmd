@@ -1,0 +1,581 @@
+---
+title: 'Module 04: Lab 01'
+subtitle: Visual Reporting and Storytelling
+author: Furong Wang
+number-sections: true
+date: '2025-03-23'
+date-modified: today
+date-format: long
+engine: jupyter
+categories:
+  - visualization
+  - plotly
+  - spark
+  - Visual Reporting
+  - Storytelling with Data
+  - Industry-Specific Visualization
+execute:
+  eval: true
+  echo: true
+jupyter: python3
+---
+
+# Objectives {.unnumbered}
+
+By the end of this lab, you will:
+1. Load and analyze the **Lightcast dataset** in **Spark DataFrame**.
+2. Create **five easy and three medium-complexity visualizations** using **Plotly**.
+3. Explore **salary distributions, employment trends, and job postings**.
+4. Analyze **skills in relation to NAICS/SOC/ONET codes and salaries**.
+5. Customize **colors, fonts, and styles** in all visualizations (**default themes result in a 2.5-point deduction**).
+6. Follow **best practices for reporting on data communication**.
+
+# Step 1: Load the Dataset {.unnumbered}
+
+```{python}
+import pandas as pd
+import plotly.express as px
+import plotly.io as pio
+pio.renderers.default = "vscode"
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, to_date, count, explode, split, trim, regexp_replace
+from pyspark.sql import functions as F
+import plotly.graph_objects as go
+```
+
+```{python}
+# Initialize Spark Session
+spark = SparkSession.builder.appName("LightcastData").getOrCreate()
+
+# Load Data
+df = spark.read.option("header", "true").option("inferSchema", "true").option("multiLine","true").option("escape", "\"").csv("./data/lightcast_job_postings.csv")
+
+# Show Schema and Sample Data
+df.printSchema()
+df.show(5)
+```
+
+# Salary Distribution by Employment Type
+- Identify salary trends across different employment types.
+- **Filter the dataset**
+  - Remove records where **salary is missing or zero**.
+- **Aggregate Data**
+  - Group by **employment type** and compute salary distribution.
+- **Visualize results**
+  - Create a **box plot** where:
+    - **X-axis** = `EMPLOYMENT_TYPE_NAME`
+    - **Y-axis** = `SALARY`
+  - Customize **colors, fonts, and styles** to avoid a **2.5-point deduction**.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+
+```{python}
+filtered_df = df.filter((col('SALARY').isNotNull()) & (col('SALARY') > 0))
+```
+
+```{python}
+salary_by_employment_type = filtered_df.groupBy('EMPLOYMENT_TYPE_NAME').agg(
+    F.min('SALARY').alias('min_salary'),
+    F.max('SALARY').alias('max_salary'),
+    F.avg('SALARY').alias('avg_salary'),
+    F.expr('percentile_approx(SALARY, 0.5)').alias('median_salary')
+)
+salary_by_employment_type.show(truncate = False)
+```
+
+```{python}
+df_pandas = filtered_df.select('EMPLOYMENT_TYPE_NAME', 'SALARY').toPandas()
+
+fig = px.box(df_pandas, 
+             x = 'EMPLOYMENT_TYPE_NAME', 
+             y = 'SALARY', 
+             title = 'Salary Distribution by Employment Type',
+             labels = {'EMPLOYMENT_TYPE_NAME': 
+                       'Employment Type', 'SALARY': 'Salary'},
+             color = 'EMPLOYMENT_TYPE_NAME', 
+             template= "simple_white",
+             color_discrete_sequence = px.colors.qualitative.Set2)
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 16),
+    xaxis = dict(
+        tickmode = 'array',
+        tickvals = [0, 1, 2],
+        ticktext = ['Mixed', 'Full-Time (> 32 hr)', 'Part-Time (≤ 32 hr)']),
+    yaxis_title = 'Salary',
+    plot_bgcolor = 'white',
+    paper_bgcolor = 'lightgray')
+
+fig.show()
+```
+
+The box plot shows salary distributions across different employment types. It highlights that Full-Time jobs have the highest median salary and a wider interquartile range (IQR), indicating higher salaries and greater variability in earnings. The presence of outliers suggests that some positions in this category offer exceptionally high salaries. 
+
+In addition, Part-Time salaries are generally lower, with a lower median and a tighter IQR, indicating less variability. Finally, Mixed employment type falls between the two, showing moderate salary dispersion. This analysis suggests that full-time jobs generally offer higher pay than part-time roles, but salaries within each category still vary significantly.
+
+# Salary Distribution by Industry
+- Compare salary variations across industries.
+- **Filter the dataset**
+  - Keep records where **salary is greater than zero**.
+- **Aggregate Data**
+  - Group by **NAICS industry codes**.
+- **Visualize results**
+  - Create a **box plot** where:
+    - **X-axis** = `NAICS2_NAME`
+    - **Y-axis** = `SALARY`
+  - Customize colors, fonts, and styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+salary_by_NAICS = filtered_df.groupBy('NAICS2_NAME').agg(
+    F.min('SALARY').alias('min_salary'),
+    F.max('SALARY').alias('max_salary'),
+    F.avg('SALARY').alias('avg_salary'),
+    F.expr('percentile_approx(SALARY, 0.5)').alias('median_salary')
+)
+salary_by_NAICS.show(30, truncate = False)
+```
+
+```{python}
+df_pandas_NAICS = filtered_df.select('NAICS2_NAME', 'SALARY').toPandas()
+
+industry_mapping = {
+    "Retail Trade": "Retail",
+    "Administrative and Support and Waste Management and Remediation Services": "Admin & Waste Mgmt",
+    "Finance and Insurance": "Finance & Insurance",
+    "Unclassified Industry": "Unclassified",
+    "Information": "Information",
+    "Manufacturing": "Manufacturing",
+    "Professional, Scientific, and Technical Services": "Professional Services",
+    "Wholesale Trade": "Wholesale",
+    "Educational Services": "Education",
+    "Health Care and Social Assistance": "Health & Social",
+    "Public Administration": "Public Admin",
+    "Construction": "Construction",
+    "Transportation and Warehousing": "Transport & Warehousing",
+    "Real Estate and Rental and Leasing": "Real Estate & Lease",
+    "Accommodation and Food Services": "Hospitality",
+    "Other Services (except Public Administration)": "Other Services",
+    "Management of Companies and Enterprises": "Management",
+    "Mining, Quarrying, and Oil and Gas Extraction": "Mining & Extraction",
+    "Agriculture, Forestry, Fishing and Hunting": "Agriculture & Fishing",
+    "Utilities": "Utilities",
+    "Arts, Entertainment, and Recreation": "Arts & Entertainment"
+}
+
+df_pandas_NAICS['NAICS2_NAME'] = df_pandas_NAICS['NAICS2_NAME'].map(industry_mapping)
+
+fig = px.box(df_pandas_NAICS,
+             x = 'NAICS2_NAME',
+             y = 'SALARY',
+             color = 'NAICS2_NAME',
+             title = 'Salary Distribution by Industry',
+             labels = {'NAICS2_NAME': 'Industry', 
+                       'SALARY': 'Salary'},
+             template= "simple_white",
+             width = 1000, 
+             height = 600)
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 20),
+    xaxis = dict(
+        title = dict(text = 'Industry', 
+                     font = dict(size = 18, family = 'Arial')),  
+        tickangle = - 45,  
+        tickfont = dict(size = 14, family = 'Arial'),
+        showline = True,  
+        linewidth = 1),
+    yaxis=dict(
+        title = dict(text = 'Salary', 
+                     font = dict(size = 18, family = 'Arial')),  
+        tickfont = dict(size = 14, family = 'Arial'),
+        showline = True,  
+        linewidth = 1),
+    showlegend = False,
+    plot_bgcolor = 'white',
+    paper_bgcolor = 'lightgray')
+
+fig.show()
+```
+
+The box plot indicates that industries such as Accommodation and Food Services and Information tend to have higher median salaries and wider salary distributions, suggesting greater earning potential and variability. In contrast, industries like Public Administration, Educational Services, and Arts & Entertainment show lower median salaries with a more compressed range, implying more consistency in lower wages. 
+
+Moreover, certain industries, such as Health Care and Social Assistance and Admin & Waste Mgmt, show a high number of outliers, suggesting the presence of highly paid roles. However, other industies like Mining, Quarrying, and Oil and Gas Extraction have more compact distributions, indicating more standardized salary ranges. The Unclassified category has a broad salary spread, likely due to its diverse job postings.
+
+# Job Posting Trends Over Time
+- Analyze how job postings fluctuate over time.
+- **Aggregate Data**
+  - Count job postings per **posted date (`POSTED`)**.
+- **Visualize results**
+  - Create a **line chart** where:
+    - **X-axis** = `POSTED`
+    - **Y-axis** = `Number of Job Postings`
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+df_to_date = df.withColumn('POSTED', to_date(col('POSTED')))
+job_trends = df_to_date.groupBy('POSTED').agg(count('*').alias('num_postings'))
+
+job_trends.show(5)
+```
+
+```{python}
+job_trends_pd = job_trends.toPandas().sort_values('POSTED')
+
+fig = px.line(job_trends_pd, 
+              x = 'POSTED', 
+              y = 'num_postings', 
+              title = 'Job Posting Trends Over Time',
+              labels = {'POSTED': 'Date', 
+                        'num_postings': 'Number of Job Postings'},
+              line_shape = 'linear', 
+              color_discrete_sequence = ["#1d6ef3"],
+              markers = True,
+              width = 1000, 
+              height = 500)
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 20),
+    xaxis = dict(
+        title = dict(text = 'Month', 
+                     font = dict(size = 18, family = 'Arial')),
+        tickformat = '%b %Y',
+        tickfont = dict(size = 14, family = 'Arial'),  
+        dtick = 'M1',
+        tickangle = -30,
+        showline = True,
+        linewidth = 1,
+        linecolor = 'black'),
+    yaxis=dict(
+        title = dict(text = 'Number of Job Postings', 
+                     font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 14, family = 'Arial'),                     
+        showline = True,
+        linewidth = 1,
+        linecolor = 'black',
+        gridcolor = 'lightgray'),
+    plot_bgcolor = 'white',
+    paper_bgcolor = 'lightgray'
+)
+
+fig.show()
+```
+
+This graph shows that the number of job postings varies significantly over time, with frequent peaks and valleys. This suggests seasonal or cyclical hiring trends, possibly influenced by industry demands or economic factors. In addition, a noticeable peak in June 2024 indicates a surge in job postings, which could be due to companies ramping up hiring before the summer. 
+
+# Top 10 Job Titles by Count
+- Identify the most frequently posted job titles.
+- **Aggregate Data**
+  - Count the occurrences of each **job title (`TITLE_NAME`)**.
+  - Select the **top 10 most frequent titles**.
+- **Visualize results**
+  - Create a **bar chart** where:
+    - **X-axis** = `TITLE_NAME`
+    - **Y-axis** = `Job Count`
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+df.createOrReplaceTempView("jobs")
+top_job_titles = spark.sql("""
+    SELECT TITLE_NAME, COUNT(*) AS job_count
+    FROM jobs
+    GROUP BY TITLE_NAME
+    ORDER BY job_count DESC
+    LIMIT 10
+""")
+top_job_titles.show(truncate = False)
+```
+
+```{python}
+top_job_titles_pd = top_job_titles.toPandas()
+
+fig = px.bar(top_job_titles_pd, 
+             x = 'TITLE_NAME', 
+             y = 'job_count', 
+             title = 'Top 10 Job Titles by Count',
+             labels = {'TITLE_NAME': 'Job Title', 
+                       'job_count': 'Job Count'},
+             color = 'job_count',
+             color_continuous_scale = 'Viridis',
+             width = 900, 
+             height = 650)
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 20),
+    xaxis = dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 14, family = 'Arial'),  
+        tickangle = -40),
+    yaxis=dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 14, family = 'Arial')),
+    plot_bgcolor = 'lightgrey',
+    paper_bgcolor = 'white')
+
+fig.show()
+```
+
+The bar chart shows that Data Analysts are the most frequently posted job title, indicating a strong demand for data professionals. The presence of multiple data-related roles such as Business Intelligence Analysts, Data Modelers, and Data Governance Analysts suggests that companies are prioritizing data-driven decision-making.
+
+Additionally, the Unclassified category, with 3,151 postings, may indicate job postings with missing or non-standardized titles. Specialized roles like Oracle Cloud HCM Consultants and Enterprise Architects also appear in the top 10, reflecting demand for expertise in enterprise systems and cloud solutions.
+
+# Remote vs On-Site Job Postings
+- Compare the proportion of remote and on-site job postings.
+- **Aggregate Data**
+  - Count job postings by **remote type (`REMOTE_TYPE_NAME`)**.
+- **Visualize results**
+  - Create a **pie chart** where:
+    - **Labels** = `REMOTE_TYPE_NAME`
+    - **Values** = `Job Count`
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+remote_type = df.groupBy('REMOTE_TYPE_NAME').agg(count('*').alias('job_count'))
+remote_type = remote_type.na.replace({'[None]': 'On-site'}, subset=['REMOTE_TYPE_NAME'])
+remote_type_pd = remote_type.toPandas()
+
+remote_type.show()
+```
+
+```{python}
+fig = px.pie(remote_type_pd, 
+             names = 'REMOTE_TYPE_NAME', 
+             values = "job_count",
+             title = "Remote vs. On-Site Job Postings",
+             template= "simple_white",
+             color_discrete_sequence = px.colors.qualitative.Pastel,
+             hole = 0.3,
+             width = 800, 
+             height = 500)
+
+fig.update_layout(
+    font = dict(size = 20, family = 'Arial'),
+    legend_title_text = 'Job Type',
+    legend = dict(font = dict(size = 16)))
+
+fig.show()
+```
+
+The pie chart shows that the most common job type is on-site work, with remote and hybrid jobs making up smaller portions. The majority of job postings shows that most companies are still requiring employees to work on-site. The slice for on-site jobs would dominate the pie chart, making up the largest portion. On the other hand, the "Not Remote" category likely refers to jobs that do not offer remote work options, but they may not strictly be on-site jobs (they could be in-person with specific constraints). This slice would be quite small, indicating that a limited number of job postings fall into this category.
+
+# Skill Demand Analysis by Industry (Stacked Bar Chart)
+- Identify which skills are most in demand in various industries.
+- **Aggregate Data**
+  - Extract **skills** from job postings.
+  - Count occurrences of skills grouped by **NAICS industry codes**.
+- **Visualize results**
+  - Create a **stacked bar chart** where:
+    - **X-axis** = `Industry`
+    - **Y-axis** = `Skill Count`
+    - **Color** = `Skill`
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+skills_by_industry = df.withColumn(
+    'SKILLS_NAME',
+    regexp_replace(col('SKILLS_NAME'), r'[\[\]\n"]', ''))
+
+skills_by_industry = skills_by_industry.withColumn('SKILLS_NAME', explode(split(col('SKILLS_NAME'), ",")))
+skills_by_industry = skills_by_industry.withColumn('SKILLS_NAME', trim(col('SKILLS_NAME')))
+
+skill_counts = skills_by_industry.groupBy('NAICS2_NAME', 'SKILLS_NAME').agg(count('*').alias('skill_count'))
+
+skill_counts.show(10, truncate=False)
+```
+
+```{python}
+skill_counts_pd = skill_counts.toPandas()
+
+industry_mapping = {
+    "Retail Trade": "Retail",
+    "Administrative and Support and Waste Management and Remediation Services": "Admin & Waste Mgmt",
+    "Finance and Insurance": "Finance & Insurance",
+    "Unclassified Industry": "Unclassified",
+    "Information": "Information",
+    "Manufacturing": "Manufacturing",
+    "Professional, Scientific, and Technical Services": "Professional Services",
+    "Wholesale Trade": "Wholesale",
+    "Educational Services": "Education",
+    "Health Care and Social Assistance": "Health & Social",
+    "Public Administration": "Public Admin",
+    "Construction": "Construction",
+    "Transportation and Warehousing": "Transport & Warehousing",
+    "Real Estate and Rental and Leasing": "Real Estate & Lease",
+    "Accommodation and Food Services": "Hospitality",
+    "Other Services (except Public Administration)": "Other Services",
+    "Management of Companies and Enterprises": "Management",
+    "Mining, Quarrying, and Oil and Gas Extraction": "Mining & Extraction",
+    "Agriculture, Forestry, Fishing and Hunting": "Agriculture & Fishing",
+    "Utilities": "Utilities",
+    "Arts, Entertainment, and Recreation": "Arts & Entertainment"
+}
+
+skill_counts_pd['NAICS2_NAME'] = skill_counts_pd['NAICS2_NAME'].map(industry_mapping)
+
+top_n_skills = 10  
+top_skills = skill_counts_pd.groupby('SKILLS_NAME')['skill_count'].sum().nlargest(top_n_skills).index
+skill_counts_top10 = skill_counts_pd[skill_counts_pd['SKILLS_NAME'].isin(top_skills)]
+```
+
+```{python}
+fig = px.bar(skill_counts_top10,
+             x = 'NAICS2_NAME',  
+             y = 'skill_count', 
+             color = 'SKILLS_NAME', 
+             title = 'Skill Demand by Industry',
+             labels = {'NAICS2_NAME': 'Industry', 
+                       'skill_count': "Skill Count", 
+                       'SKILLS_NAME': 'Skill'},
+            width = 1100,
+            height = 650)
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 16),
+    xaxis = dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 16, family = 'Arial'),  
+        tickangle = -40,
+        showline = True,
+        linecolor = 'black',
+        linewidth = 1),
+    yaxis = dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 16, family = 'Arial'),
+        showline = True,
+        linecolor = 'black',
+        linewidth = 1),
+    legend_title = 'Skills',
+    paper_bgcolor = 'white')
+
+fig.show()
+```
+
+This barplot shows that skill demand varies significantly across industries. For example, the Professional, Scientific, and Technical Services sector shows the highest demand for the top 10 skills, indicating that this industry places a premium on a diverse and comprehensive skill set. However,  industries like Arts, Entertainment, and Recreation show the least demand for these top skills, which may suggest a more specialized skill set or potentially a slower pace of digital transformation within these sectors.
+
+Communication, Management, and Data Analysis consistently appear across nearly all industries, reinforcing their status as highly transferable and in-demand skills. These skills are likely essential across various roles and sectors, contributing to their widespread recognition.
+
+
+# Salary Analysis by ONET Occupation Type (Bubble Chart)
+- Analyze how salaries differ across ONET occupation types.
+- **Aggregate Data**
+  - Compute **median salary** for each occupation in the **ONET taxonomy**.
+- **Visualize results**
+  - Create a **bubble chart** where:
+    - **X-axis** = `ONET_NAME`
+    - **Y-axis** = `Median Salary`
+    - **Size** = Number of job postings
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+median_salary = spark.sql("""
+    SELECT 
+        TITLE_NAME AS ONET_NAME, 
+        percentile_approx(SALARY, 0.5) AS Median_Salary,
+        COUNT(*) AS Job_Postings
+    FROM jobs
+    GROUP BY TITLE_NAME
+    ORDER BY Job_Postings DESC
+    LIMIT 10
+""")
+
+median_salary.show()
+```
+
+```{python}
+median_salary_pd = median_salary.toPandas()
+
+fig = px.scatter(median_salary_pd, 
+                 x = 'ONET_NAME', 
+                 y = 'Median_Salary', 
+                 size = 'Job_Postings', 
+                 color = 'Job_Postings',
+                 hover_name = 'ONET_NAME',
+                 title = 'Salary Analysis by ONET Occupation Type',
+                 labels = {'ONET_NAME': 'Occupation Type', 
+                           'Median_Salary': 'Median Salary (USD)', 
+                           'Job_Postings': 'Number of Job Postings'},
+                 width = 1100,
+                 height = 650,
+                 size_max = 70,
+                 color_continuous_scale = 'Plasma')
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 16),
+    xaxis = dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 16, family = 'Arial'),  
+        tickangle = -40,
+        showline = True,
+        linecolor = 'black',
+        linewidth = 1),
+    yaxis = dict(
+        title = dict(font = dict(size = 18, family = 'Arial')),
+        tickfont = dict(size = 16, family = 'Arial'),
+        showline = True,
+        linecolor = 'black',
+        linewidth = 1),
+    paper_bgcolor = 'white'
+)
+
+fig.show()
+```
+
+The bubble chart shows that Data Analysts account for the highest number of job postings, but their median salary is relatively lower than other ONET occupation categories. In contrast, Data Analytics Engineers have the highest median salaries, but job postings reflect that demand for these roles remains relatively low. The Unclassified category stands out with both a high volume of postings and a strong median salary, indicating that a substantial portion of job listings may not be directly associated with specific ONET occupations and require further understanding.
+
+# Career Pathway Trends (Sankey Diagram)
+- Visualize job transitions between different occupation levels.
+- **Aggregate Data**
+  - Identify career transitions between **SOC job classifications**.
+- **Visualize results**
+  - Create a **Sankey diagram** where:
+    - **Source** = `SOC_2021_2_NAME`
+    - **Target** = `SOC_2021_3_NAME`
+    - **Value** = Number of transitions
+  - Apply custom colors and font styles.
+- **Explanation:** Write two sentences about what the graph reveals.
+
+```{python}
+transition_df = df.groupBy('SOC_2021_2_NAME', 'SOC_2021_3_NAME').agg(F.count('*').alias('num_transitions'))
+
+transition_df.show()
+```
+
+```{python}
+transition_pd = transition_df.toPandas()
+
+all_labels = list(set(transition_pd['SOC_2021_2_NAME'].unique()) | set(transition_pd['SOC_2021_3_NAME'].unique()))
+
+label_dict = {label: i for i, label in enumerate(all_labels)}
+
+transition_pd['source_index'] = transition_pd['SOC_2021_2_NAME'].map(label_dict)
+transition_pd['target_index'] = transition_pd['SOC_2021_3_NAME'].map(label_dict)
+
+fig = go.Figure(go.Sankey(
+    node = dict(pad = 15,
+                thickness = 20,
+                line=dict(color = 'black', width = 0.5),
+                label = all_labels,
+                color = 'lightblue'),
+    link = dict(source=transition_pd['source_index'],
+                target=transition_pd['target_index'],
+                value=transition_pd['num_transitions'],
+                color= 'orange')))
+
+fig.update_layout(
+    font = dict(family = 'Arial', size = 16),
+    title_text = 'Career Pathway Trends: Job Transitions',
+    title_font = dict(family = 'Arial', size = 20),
+    paper_bgcolor = 'white')
+
+fig.show()
+```
+
+The Sankey diagram highlights a notable career transition from Computer and Mathematical Occupations to Mathematical Science Occupations, suggesting a significant pathway between these fields. This reflects a strong overlap, indicating that individuals in computing roles may easily transition into mathematical science positions, showcasing mobility and flexibility across related disciplines.
+
+However, the diagram shows only a single transition between these two occupation groups, implying that the current dataset captures a limited career pathway—possibly focusing on transitions within fields like data science or analytics. This may also suggest that other potential occupation transitions were either not recorded or unavailable in the dataset.
+
