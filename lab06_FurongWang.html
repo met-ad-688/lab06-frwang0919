@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.547">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Furong Wang">
+<meta name="dcterms.date" content="2025-03-23">
+
+<title>Module 04: Lab 01</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="lab06_FurongWang_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lab06_FurongWang_files/libs/quarto-html/quarto.js"></script>
+<script src="lab06_FurongWang_files/libs/quarto-html/popper.min.js"></script>
+<script src="lab06_FurongWang_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="lab06_FurongWang_files/libs/quarto-html/anchor.min.js"></script>
+<link href="lab06_FurongWang_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lab06_FurongWang_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lab06_FurongWang_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="lab06_FurongWang_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="lab06_FurongWang_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="lab06_FurongWang.docx"><i class="bi bi-file-word"></i>MS Word</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Module 04: Lab 01</h1>
+<p class="subtitle lead">Visual Reporting and Storytelling</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">visualization</div>
+    <div class="quarto-category">plotly</div>
+    <div class="quarto-category">spark</div>
+    <div class="quarto-category">Visual Reporting</div>
+    <div class="quarto-category">Storytelling with Data</div>
+    <div class="quarto-category">Industry-Specific Visualization</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Furong Wang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 23, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">March 27, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level1 unnumbered">
+<h1 class="unnumbered">Objectives</h1>
+<p>By the end of this lab, you will: 1. Load and analyze the <strong>Lightcast dataset</strong> in <strong>Spark DataFrame</strong>. 2. Create <strong>five easy and three medium-complexity visualizations</strong> using <strong>Plotly</strong>. 3. Explore <strong>salary distributions, employment trends, and job postings</strong>. 4. Analyze <strong>skills in relation to NAICS/SOC/ONET codes and salaries</strong>. 5. Customize <strong>colors, fonts, and styles</strong> in all visualizations (<strong>default themes result in a 2.5-point deduction</strong>). 6. Follow <strong>best practices for reporting on data communication</strong>.</p>
+</section>
+<section id="step-1-load-the-dataset" class="level1 unnumbered">
+<h1 class="unnumbered">Step 1: Load the Dataset</h1>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pio.renderers.default <span class="op">=</span> <span class="st">"vscode"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> col, to_date, count, explode, split, trim, regexp_replace</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> functions <span class="im">as</span> F</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize Spark Session</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession.builder.appName(<span class="st">"LightcastData"</span>).getOrCreate()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.option(<span class="st">"header"</span>, <span class="st">"true"</span>).option(<span class="st">"inferSchema"</span>, <span class="st">"true"</span>).option(<span class="st">"multiLine"</span>,<span class="st">"true"</span>).option(<span class="st">"escape"</span>, <span class="st">"</span><span class="ch">\"</span><span class="st">"</span>).csv(<span class="st">"./data/lightcast_job_postings.csv"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show Schema and Sample Data</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df.printSchema()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df.show(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+25/03/27 04:50:08 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+                                                                                25/03/27 04:50:25 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>root
+ |-- ID: string (nullable = true)
+ |-- LAST_UPDATED_DATE: date (nullable = true)
+ |-- LAST_UPDATED_TIMESTAMP: timestamp (nullable = true)
+ |-- DUPLICATES: integer (nullable = true)
+ |-- POSTED: date (nullable = true)
+ |-- EXPIRED: date (nullable = true)
+ |-- DURATION: integer (nullable = true)
+ |-- SOURCE_TYPES: string (nullable = true)
+ |-- SOURCES: string (nullable = true)
+ |-- URL: string (nullable = true)
+ |-- ACTIVE_URLS: string (nullable = true)
+ |-- ACTIVE_SOURCES_INFO: string (nullable = true)
+ |-- TITLE_RAW: string (nullable = true)
+ |-- BODY: string (nullable = true)
+ |-- MODELED_EXPIRED: date (nullable = true)
+ |-- MODELED_DURATION: integer (nullable = true)
+ |-- COMPANY: integer (nullable = true)
+ |-- COMPANY_NAME: string (nullable = true)
+ |-- COMPANY_RAW: string (nullable = true)
+ |-- COMPANY_IS_STAFFING: boolean (nullable = true)
+ |-- EDUCATION_LEVELS: string (nullable = true)
+ |-- EDUCATION_LEVELS_NAME: string (nullable = true)
+ |-- MIN_EDULEVELS: integer (nullable = true)
+ |-- MIN_EDULEVELS_NAME: string (nullable = true)
+ |-- MAX_EDULEVELS: integer (nullable = true)
+ |-- MAX_EDULEVELS_NAME: string (nullable = true)
+ |-- EMPLOYMENT_TYPE: integer (nullable = true)
+ |-- EMPLOYMENT_TYPE_NAME: string (nullable = true)
+ |-- MIN_YEARS_EXPERIENCE: integer (nullable = true)
+ |-- MAX_YEARS_EXPERIENCE: integer (nullable = true)
+ |-- IS_INTERNSHIP: boolean (nullable = true)
+ |-- SALARY: integer (nullable = true)
+ |-- REMOTE_TYPE: integer (nullable = true)
+ |-- REMOTE_TYPE_NAME: string (nullable = true)
+ |-- ORIGINAL_PAY_PERIOD: string (nullable = true)
+ |-- SALARY_TO: integer (nullable = true)
+ |-- SALARY_FROM: integer (nullable = true)
+ |-- LOCATION: string (nullable = true)
+ |-- CITY: string (nullable = true)
+ |-- CITY_NAME: string (nullable = true)
+ |-- COUNTY: integer (nullable = true)
+ |-- COUNTY_NAME: string (nullable = true)
+ |-- MSA: integer (nullable = true)
+ |-- MSA_NAME: string (nullable = true)
+ |-- STATE: integer (nullable = true)
+ |-- STATE_NAME: string (nullable = true)
+ |-- COUNTY_OUTGOING: integer (nullable = true)
+ |-- COUNTY_NAME_OUTGOING: string (nullable = true)
+ |-- COUNTY_INCOMING: integer (nullable = true)
+ |-- COUNTY_NAME_INCOMING: string (nullable = true)
+ |-- MSA_OUTGOING: integer (nullable = true)
+ |-- MSA_NAME_OUTGOING: string (nullable = true)
+ |-- MSA_INCOMING: integer (nullable = true)
+ |-- MSA_NAME_INCOMING: string (nullable = true)
+ |-- NAICS2: integer (nullable = true)
+ |-- NAICS2_NAME: string (nullable = true)
+ |-- NAICS3: integer (nullable = true)
+ |-- NAICS3_NAME: string (nullable = true)
+ |-- NAICS4: integer (nullable = true)
+ |-- NAICS4_NAME: string (nullable = true)
+ |-- NAICS5: integer (nullable = true)
+ |-- NAICS5_NAME: string (nullable = true)
+ |-- NAICS6: integer (nullable = true)
+ |-- NAICS6_NAME: string (nullable = true)
+ |-- TITLE: string (nullable = true)
+ |-- TITLE_NAME: string (nullable = true)
+ |-- TITLE_CLEAN: string (nullable = true)
+ |-- SKILLS: string (nullable = true)
+ |-- SKILLS_NAME: string (nullable = true)
+ |-- SPECIALIZED_SKILLS: string (nullable = true)
+ |-- SPECIALIZED_SKILLS_NAME: string (nullable = true)
+ |-- CERTIFICATIONS: string (nullable = true)
+ |-- CERTIFICATIONS_NAME: string (nullable = true)
+ |-- COMMON_SKILLS: string (nullable = true)
+ |-- COMMON_SKILLS_NAME: string (nullable = true)
+ |-- SOFTWARE_SKILLS: string (nullable = true)
+ |-- SOFTWARE_SKILLS_NAME: string (nullable = true)
+ |-- ONET: string (nullable = true)
+ |-- ONET_NAME: string (nullable = true)
+ |-- ONET_2019: string (nullable = true)
+ |-- ONET_2019_NAME: string (nullable = true)
+ |-- CIP6: string (nullable = true)
+ |-- CIP6_NAME: string (nullable = true)
+ |-- CIP4: string (nullable = true)
+ |-- CIP4_NAME: string (nullable = true)
+ |-- CIP2: string (nullable = true)
+ |-- CIP2_NAME: string (nullable = true)
+ |-- SOC_2021_2: string (nullable = true)
+ |-- SOC_2021_2_NAME: string (nullable = true)
+ |-- SOC_2021_3: string (nullable = true)
+ |-- SOC_2021_3_NAME: string (nullable = true)
+ |-- SOC_2021_4: string (nullable = true)
+ |-- SOC_2021_4_NAME: string (nullable = true)
+ |-- SOC_2021_5: string (nullable = true)
+ |-- SOC_2021_5_NAME: string (nullable = true)
+ |-- LOT_CAREER_AREA: integer (nullable = true)
+ |-- LOT_CAREER_AREA_NAME: string (nullable = true)
+ |-- LOT_OCCUPATION: integer (nullable = true)
+ |-- LOT_OCCUPATION_NAME: string (nullable = true)
+ |-- LOT_SPECIALIZED_OCCUPATION: integer (nullable = true)
+ |-- LOT_SPECIALIZED_OCCUPATION_NAME: string (nullable = true)
+ |-- LOT_OCCUPATION_GROUP: integer (nullable = true)
+ |-- LOT_OCCUPATION_GROUP_NAME: string (nullable = true)
+ |-- LOT_V6_SPECIALIZED_OCCUPATION: integer (nullable = true)
+ |-- LOT_V6_SPECIALIZED_OCCUPATION_NAME: string (nullable = true)
+ |-- LOT_V6_OCCUPATION: integer (nullable = true)
+ |-- LOT_V6_OCCUPATION_NAME: string (nullable = true)
+ |-- LOT_V6_OCCUPATION_GROUP: integer (nullable = true)
+ |-- LOT_V6_OCCUPATION_GROUP_NAME: string (nullable = true)
+ |-- LOT_V6_CAREER_AREA: integer (nullable = true)
+ |-- LOT_V6_CAREER_AREA_NAME: string (nullable = true)
+ |-- SOC_2: string (nullable = true)
+ |-- SOC_2_NAME: string (nullable = true)
+ |-- SOC_3: string (nullable = true)
+ |-- SOC_3_NAME: string (nullable = true)
+ |-- SOC_4: string (nullable = true)
+ |-- SOC_4_NAME: string (nullable = true)
+ |-- SOC_5: string (nullable = true)
+ |-- SOC_5_NAME: string (nullable = true)
+ |-- LIGHTCAST_SECTORS: string (nullable = true)
+ |-- LIGHTCAST_SECTORS_NAME: string (nullable = true)
+ |-- NAICS_2022_2: integer (nullable = true)
+ |-- NAICS_2022_2_NAME: string (nullable = true)
+ |-- NAICS_2022_3: integer (nullable = true)
+ |-- NAICS_2022_3_NAME: string (nullable = true)
+ |-- NAICS_2022_4: integer (nullable = true)
+ |-- NAICS_2022_4_NAME: string (nullable = true)
+ |-- NAICS_2022_5: integer (nullable = true)
+ |-- NAICS_2022_5_NAME: string (nullable = true)
+ |-- NAICS_2022_6: integer (nullable = true)
+ |-- NAICS_2022_6_NAME: string (nullable = true)
+
++--------------------+-----------------+----------------------+----------+----------+----------+--------+--------------------+--------------------+--------------------+-----------+-------------------+--------------------+--------------------+---------------+----------------+--------+--------------------+-----------+-------------------+----------------+---------------------+-------------+-------------------+-------------+------------------+---------------+--------------------+--------------------+--------------------+-------------+------+-----------+----------------+-------------------+---------+-----------+--------------------+--------------------+-------------+------+--------------+-----+--------------------+-----+----------+---------------+--------------------+---------------+--------------------+------------+--------------------+------------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------------------+-------------------+--------------------+--------------------+--------------------+--------------------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+----------+---------------+----------+---------------+---------------+--------------------+--------------+--------------------+--------------------------+-------------------------------+--------------------+-------------------------+-----------------------------+----------------------------------+-----------------+----------------------+-----------------------+----------------------------+------------------+-----------------------+-------+--------------------+-------+--------------------+-------+---------------+-------+---------------+-----------------+----------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+
+|                  ID|LAST_UPDATED_DATE|LAST_UPDATED_TIMESTAMP|DUPLICATES|    POSTED|   EXPIRED|DURATION|        SOURCE_TYPES|             SOURCES|                 URL|ACTIVE_URLS|ACTIVE_SOURCES_INFO|           TITLE_RAW|                BODY|MODELED_EXPIRED|MODELED_DURATION| COMPANY|        COMPANY_NAME|COMPANY_RAW|COMPANY_IS_STAFFING|EDUCATION_LEVELS|EDUCATION_LEVELS_NAME|MIN_EDULEVELS| MIN_EDULEVELS_NAME|MAX_EDULEVELS|MAX_EDULEVELS_NAME|EMPLOYMENT_TYPE|EMPLOYMENT_TYPE_NAME|MIN_YEARS_EXPERIENCE|MAX_YEARS_EXPERIENCE|IS_INTERNSHIP|SALARY|REMOTE_TYPE|REMOTE_TYPE_NAME|ORIGINAL_PAY_PERIOD|SALARY_TO|SALARY_FROM|            LOCATION|                CITY|    CITY_NAME|COUNTY|   COUNTY_NAME|  MSA|            MSA_NAME|STATE|STATE_NAME|COUNTY_OUTGOING|COUNTY_NAME_OUTGOING|COUNTY_INCOMING|COUNTY_NAME_INCOMING|MSA_OUTGOING|   MSA_NAME_OUTGOING|MSA_INCOMING|   MSA_NAME_INCOMING|NAICS2|         NAICS2_NAME|NAICS3|         NAICS3_NAME|NAICS4|         NAICS4_NAME|NAICS5|         NAICS5_NAME|NAICS6|         NAICS6_NAME|             TITLE|         TITLE_NAME|         TITLE_CLEAN|              SKILLS|         SKILLS_NAME|  SPECIALIZED_SKILLS|SPECIALIZED_SKILLS_NAME|      CERTIFICATIONS| CERTIFICATIONS_NAME|       COMMON_SKILLS|  COMMON_SKILLS_NAME|     SOFTWARE_SKILLS|SOFTWARE_SKILLS_NAME|      ONET|           ONET_NAME| ONET_2019|      ONET_2019_NAME|                CIP6|           CIP6_NAME|                CIP4|           CIP4_NAME|                CIP2|           CIP2_NAME|SOC_2021_2|     SOC_2021_2_NAME|SOC_2021_3|     SOC_2021_3_NAME|SOC_2021_4|SOC_2021_4_NAME|SOC_2021_5|SOC_2021_5_NAME|LOT_CAREER_AREA|LOT_CAREER_AREA_NAME|LOT_OCCUPATION| LOT_OCCUPATION_NAME|LOT_SPECIALIZED_OCCUPATION|LOT_SPECIALIZED_OCCUPATION_NAME|LOT_OCCUPATION_GROUP|LOT_OCCUPATION_GROUP_NAME|LOT_V6_SPECIALIZED_OCCUPATION|LOT_V6_SPECIALIZED_OCCUPATION_NAME|LOT_V6_OCCUPATION|LOT_V6_OCCUPATION_NAME|LOT_V6_OCCUPATION_GROUP|LOT_V6_OCCUPATION_GROUP_NAME|LOT_V6_CAREER_AREA|LOT_V6_CAREER_AREA_NAME|  SOC_2|          SOC_2_NAME|  SOC_3|          SOC_3_NAME|  SOC_4|     SOC_4_NAME|  SOC_5|     SOC_5_NAME|LIGHTCAST_SECTORS|LIGHTCAST_SECTORS_NAME|NAICS_2022_2|   NAICS_2022_2_NAME|NAICS_2022_3|   NAICS_2022_3_NAME|NAICS_2022_4|   NAICS_2022_4_NAME|NAICS_2022_5|   NAICS_2022_5_NAME|NAICS_2022_6|   NAICS_2022_6_NAME|
++--------------------+-----------------+----------------------+----------+----------+----------+--------+--------------------+--------------------+--------------------+-----------+-------------------+--------------------+--------------------+---------------+----------------+--------+--------------------+-----------+-------------------+----------------+---------------------+-------------+-------------------+-------------+------------------+---------------+--------------------+--------------------+--------------------+-------------+------+-----------+----------------+-------------------+---------+-----------+--------------------+--------------------+-------------+------+--------------+-----+--------------------+-----+----------+---------------+--------------------+---------------+--------------------+------------+--------------------+------------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------------------+-------------------+--------------------+--------------------+--------------------+--------------------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+----------+---------------+----------+---------------+---------------+--------------------+--------------+--------------------+--------------------------+-------------------------------+--------------------+-------------------------+-----------------------------+----------------------------------+-----------------+----------------------+-----------------------+----------------------------+------------------+-----------------------+-------+--------------------+-------+--------------------+-------+---------------+-------+---------------+-----------------+----------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+
+|1f57d95acf4dc67ed...|       2024-09-06|  2024-09-06 20:32:...|         0|2024-06-02|2024-06-08|       6|   [\n  "Company"\n]|[\n  "brassring.c...|[\n  "https://sjo...|         []|               NULL|Enterprise Analys...|31-May-2024\n\nEn...|     2024-06-08|               6|  894731|          Murphy USA| Murphy USA|              false|       [\n  2\n]| [\n  "Bachelor's ...|            2|  Bachelor's degree|         NULL|              NULL|              1|Full-time (&gt; 32 h...|                   2|                   2|        false|  NULL|          0|          [None]|               NULL|     NULL|       NULL|{\n  "lat": 33.20...|RWwgRG9yYWRvLCBBUg==|El Dorado, AR|  5139|     Union, AR|20980|       El Dorado, AR|    5|  Arkansas|           5139|           Union, AR|           5139|           Union, AR|       20980|       El Dorado, AR|       20980|       El Dorado, AR|    44|        Retail Trade|   441|Motor Vehicle and...|  4413|Automotive Parts,...| 44133|Automotive Parts ...|441330|Automotive Parts ...|ET29C073C03D1F86B4|Enterprise Analysts|enterprise analys...|[\n  "KS126DB6T06...|[\n  "Merchandisi...|[\n  "KS126DB6T06...|   [\n  "Merchandisi...|                  []|                  []|[\n  "KS126706DPF...|[\n  "Mathematics...|[\n  "KS440W865GC...|[\n  "SQL (Progra...|15-2051.01|Business Intellig...|15-2051.01|Business Intellig...|[\n  "45.0601",\n...|[\n  "Economics, ...|[\n  "45.06",\n  ...|[\n  "Economics",...|[\n  "45",\n  "27...|[\n  "Social Scie...|   15-0000|Computer and Math...|   15-2000|Mathematical Scie...|   15-2050|Data Scientists|   15-2051|Data Scientists|             23|Information Techn...|        231010|Business Intellig...|                  23101011|           General ERP Analy...|                2310|     Business Intellig...|                     23101011|              General ERP Analy...|           231010|  Business Intellig...|                   2310|        Business Intellig...|                23|   Information Techn...|15-0000|Computer and Math...|15-2000|Mathematical Scie...|15-2050|Data Scientists|15-2051|Data Scientists|        [\n  7\n]|  [\n  "Artificial ...|          44|        Retail Trade|         441|Motor Vehicle and...|        4413|Automotive Parts,...|       44133|Automotive Parts ...|      441330|Automotive Parts ...|
+|0cb072af26757b6c4...|       2024-08-02|  2024-08-02 17:08:...|         0|2024-06-02|2024-08-01|    NULL| [\n  "Job Board"\n]| [\n  "maine.gov"\n]|[\n  "https://job...|         []|               NULL|Oracle Consultant...|Oracle Consultant...|     2024-08-01|            NULL|  133098|Smx Corporation L...|        SMX|               true|      [\n  99\n]| [\n  "No Educatio...|           99|No Education Listed|         NULL|              NULL|              1|Full-time (&gt; 32 h...|                   3|                   3|        false|  NULL|          1|          Remote|               NULL|     NULL|       NULL|{\n  "lat": 44.31...|    QXVndXN0YSwgTUU=|  Augusta, ME| 23011|  Kennebec, ME|12300|Augusta-Watervill...|   23|     Maine|          23011|        Kennebec, ME|          23011|        Kennebec, ME|       12300|Augusta-Watervill...|       12300|Augusta-Watervill...|    56|Administrative an...|   561|Administrative an...|  5613| Employment Services| 56132|Temporary Help Se...|561320|Temporary Help Se...|ET21DDA63780A7DC09| Oracle Consultants|oracle consultant...|[\n  "KS122626T55...|[\n  "Procurement...|[\n  "KS122626T55...|   [\n  "Procurement...|                  []|                  []|                  []|                  []|[\n  "BGSBF3F508F...|[\n  "Oracle Busi...|15-2051.01|Business Intellig...|15-2051.01|Business Intellig...|                  []|                  []|                  []|                  []|                  []|                  []|   15-0000|Computer and Math...|   15-2000|Mathematical Scie...|   15-2050|Data Scientists|   15-2051|Data Scientists|             23|Information Techn...|        231010|Business Intellig...|                  23101012|           Oracle Consultant...|                2310|     Business Intellig...|                     23101012|              Oracle Consultant...|           231010|  Business Intellig...|                   2310|        Business Intellig...|                23|   Information Techn...|15-0000|Computer and Math...|15-2000|Mathematical Scie...|15-2050|Data Scientists|15-2051|Data Scientists|             NULL|                  NULL|          56|Administrative an...|         561|Administrative an...|        5613| Employment Services|       56132|Temporary Help Se...|      561320|Temporary Help Se...|
+|85318b12b3331fa49...|       2024-09-06|  2024-09-06 20:32:...|         1|2024-06-02|2024-07-07|      35| [\n  "Job Board"\n]|[\n  "dejobs.org"\n]|[\n  "https://dej...|         []|               NULL|        Data Analyst|Taking care of pe...|     2024-06-10|               8|39063746|            Sedgwick|   Sedgwick|              false|       [\n  2\n]| [\n  "Bachelor's ...|            2|  Bachelor's degree|         NULL|              NULL|              1|Full-time (&gt; 32 h...|                   5|                NULL|        false|  NULL|          0|          [None]|               NULL|     NULL|       NULL|{\n  "lat": 32.77...|    RGFsbGFzLCBUWA==|   Dallas, TX| 48113|    Dallas, TX|19100|Dallas-Fort Worth...|   48|     Texas|          48113|          Dallas, TX|          48113|          Dallas, TX|       19100|Dallas-Fort Worth...|       19100|Dallas-Fort Worth...|    52|Finance and Insur...|   524|Insurance Carrier...|  5242|Agencies, Brokera...| 52429|Other Insurance R...|524291|    Claims Adjusting|ET3037E0C947A02404|      Data Analysts|        data analyst|[\n  "KS1218W78FG...|[\n  "Management"...|[\n  "ESF3939CE1F...|   [\n  "Exception R...|[\n  "KS683TN76T7...|[\n  "Security Cl...|[\n  "KS1218W78FG...|[\n  "Management"...|[\n  "KS126HY6YLT...|[\n  "Microsoft O...|15-2051.01|Business Intellig...|15-2051.01|Business Intellig...|                  []|                  []|                  []|                  []|                  []|                  []|   15-0000|Computer and Math...|   15-2000|Mathematical Scie...|   15-2050|Data Scientists|   15-2051|Data Scientists|             23|Information Techn...|        231113|Data / Data Minin...|                  23111310|                   Data Analyst|                2311|     Data Analysis and...|                     23111310|                      Data Analyst|           231113|  Data / Data Minin...|                   2311|        Data Analysis and...|                23|   Information Techn...|15-0000|Computer and Math...|15-2000|Mathematical Scie...|15-2050|Data Scientists|15-2051|Data Scientists|             NULL|                  NULL|          52|Finance and Insur...|         524|Insurance Carrier...|        5242|Agencies, Brokera...|       52429|Other Insurance R...|      524291|    Claims Adjusting|
+|1b5c3941e54a1889e...|       2024-09-06|  2024-09-06 20:32:...|         1|2024-06-02|2024-07-20|      48| [\n  "Job Board"\n]|[\n  "disabledper...|[\n  "https://www...|         []|               NULL|Sr. Lead Data Mgm...|About this role:\...|     2024-06-12|              10|37615159|         Wells Fargo|Wells Fargo|              false|      [\n  99\n]| [\n  "No Educatio...|           99|No Education Listed|         NULL|              NULL|              1|Full-time (&gt; 32 h...|                   3|                NULL|        false|  NULL|          0|          [None]|               NULL|     NULL|       NULL|{\n  "lat": 33.44...|    UGhvZW5peCwgQVo=|  Phoenix, AZ|  4013|  Maricopa, AZ|38060|Phoenix-Mesa-Chan...|    4|   Arizona|           4013|        Maricopa, AZ|           4013|        Maricopa, AZ|       38060|Phoenix-Mesa-Chan...|       38060|Phoenix-Mesa-Chan...|    52|Finance and Insur...|   522|Credit Intermedia...|  5221|Depository Credit...| 52211|  Commercial Banking|522110|  Commercial Banking|ET2114E0404BA30075|Management Analysts|sr lead data mgmt...|[\n  "KS123QX62QY...|[\n  "Exit Strate...|[\n  "KS123QX62QY...|   [\n  "Exit Strate...|                  []|                  []|[\n  "KS7G6NP6R6L...|[\n  "Reliability...|[\n  "KS4409D76NW...|[\n  "SAS (Softwa...|15-2051.01|Business Intellig...|15-2051.01|Business Intellig...|                  []|                  []|                  []|                  []|                  []|                  []|   15-0000|Computer and Math...|   15-2000|Mathematical Scie...|   15-2050|Data Scientists|   15-2051|Data Scientists|             23|Information Techn...|        231113|Data / Data Minin...|                  23111310|                   Data Analyst|                2311|     Data Analysis and...|                     23111310|                      Data Analyst|           231113|  Data / Data Minin...|                   2311|        Data Analysis and...|                23|   Information Techn...|15-0000|Computer and Math...|15-2000|Mathematical Scie...|15-2050|Data Scientists|15-2051|Data Scientists|        [\n  6\n]|  [\n  "Data Privac...|          52|Finance and Insur...|         522|Credit Intermedia...|        5221|Depository Credit...|       52211|  Commercial Banking|      522110|  Commercial Banking|
+|cb5ca25f02bdf25c1...|       2024-06-19|   2024-06-19 07:00:00|         0|2024-06-02|2024-06-17|      15|[\n  "FreeJobBoar...|[\n  "craigslist....|[\n  "https://mod...|         []|               NULL|Comisiones de $10...|Comisiones de $10...|     2024-06-17|              15|       0|        Unclassified|      LH/GM|              false|      [\n  99\n]| [\n  "No Educatio...|           99|No Education Listed|         NULL|              NULL|              3|Part-time / full-...|                NULL|                NULL|        false| 92500|          0|          [None]|               year|   150000|      35000|{\n  "lat": 37.63...|    TW9kZXN0bywgQ0E=|  Modesto, CA|  6099|Stanislaus, CA|33700|         Modesto, CA|    6|California|           6099|      Stanislaus, CA|           6099|      Stanislaus, CA|       33700|         Modesto, CA|       33700|         Modesto, CA|    99|Unclassified Indu...|   999|Unclassified Indu...|  9999|Unclassified Indu...| 99999|Unclassified Indu...|999999|Unclassified Indu...|ET0000000000000000|       Unclassified|comisiones de por...|                  []|                  []|                  []|                     []|                  []|                  []|                  []|                  []|                  []|                  []|15-2051.01|Business Intellig...|15-2051.01|Business Intellig...|                  []|                  []|                  []|                  []|                  []|                  []|   15-0000|Computer and Math...|   15-2000|Mathematical Scie...|   15-2050|Data Scientists|   15-2051|Data Scientists|             23|Information Techn...|        231010|Business Intellig...|                  23101012|           Oracle Consultant...|                2310|     Business Intellig...|                     23101012|              Oracle Consultant...|           231010|  Business Intellig...|                   2310|        Business Intellig...|                23|   Information Techn...|15-0000|Computer and Math...|15-2000|Mathematical Scie...|15-2050|Data Scientists|15-2051|Data Scientists|             NULL|                  NULL|          99|Unclassified Indu...|         999|Unclassified Indu...|        9999|Unclassified Indu...|       99999|Unclassified Indu...|      999999|Unclassified Indu...|
++--------------------+-----------------+----------------------+----------+----------+----------+--------+--------------------+--------------------+--------------------+-----------+-------------------+--------------------+--------------------+---------------+----------------+--------+--------------------+-----------+-------------------+----------------+---------------------+-------------+-------------------+-------------+------------------+---------------+--------------------+--------------------+--------------------+-------------+------+-----------+----------------+-------------------+---------+-----------+--------------------+--------------------+-------------+------+--------------+-----+--------------------+-----+----------+---------------+--------------------+---------------+--------------------+------------+--------------------+------------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------+--------------------+------------------+-------------------+--------------------+--------------------+--------------------+--------------------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+--------------------+----------+--------------------+----------+--------------------+----------+---------------+----------+---------------+---------------+--------------------+--------------+--------------------+--------------------------+-------------------------------+--------------------+-------------------------+-----------------------------+----------------------------------+-----------------+----------------------+-----------------------+----------------------------+------------------+-----------------------+-------+--------------------+-------+--------------------+-------+---------------+-------+---------------+-----------------+----------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+------------+--------------------+
+only showing top 5 rows
+</code></pre>
+</div>
+</div>
+</section>
+<section id="salary-distribution-by-employment-type" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Salary Distribution by Employment Type</h1>
+<ul>
+<li>Identify salary trends across different employment types.</li>
+<li><strong>Filter the dataset</strong>
+<ul>
+<li>Remove records where <strong>salary is missing or zero</strong>.</li>
+</ul></li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Group by <strong>employment type</strong> and compute salary distribution.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>box plot</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>EMPLOYMENT_TYPE_NAME</code></li>
+<li><strong>Y-axis</strong> = <code>SALARY</code></li>
+</ul></li>
+<li>Customize <strong>colors, fonts, and styles</strong> to avoid a <strong>2.5-point deduction</strong>.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-6" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>filtered_df <span class="op">=</span> df.<span class="bu">filter</span>((col(<span class="st">'SALARY'</span>).isNotNull()) <span class="op">&amp;</span> (col(<span class="st">'SALARY'</span>) <span class="op">&gt;</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>salary_by_employment_type <span class="op">=</span> filtered_df.groupBy(<span class="st">'EMPLOYMENT_TYPE_NAME'</span>).agg(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    F.<span class="bu">min</span>(<span class="st">'SALARY'</span>).alias(<span class="st">'min_salary'</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    F.<span class="bu">max</span>(<span class="st">'SALARY'</span>).alias(<span class="st">'max_salary'</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    F.avg(<span class="st">'SALARY'</span>).alias(<span class="st">'avg_salary'</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    F.expr(<span class="st">'percentile_approx(SALARY, 0.5)'</span>).alias(<span class="st">'median_salary'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>salary_by_employment_type.show(truncate <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 3:&gt;                                                          (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+----------------------+----------+----------+------------------+-------------+
+|EMPLOYMENT_TYPE_NAME  |min_salary|max_salary|avg_salary        |median_salary|
++----------------------+----------+----------+------------------+-------------+
+|Part-time / full-time |20800     |455375    |105679.78904991949|100000       |
+|Part-time (≤ 32 hours)|15860     |310050    |98802.50963391137 |86390        |
+|Full-time (&gt; 32 hours)|20583     |500000    |118898.34634246716|116500       |
++----------------------+----------+----------+------------------+-------------+
+</code></pre>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_pandas <span class="op">=</span> filtered_df.select(<span class="st">'EMPLOYMENT_TYPE_NAME'</span>, <span class="st">'SALARY'</span>).toPandas()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.box(df_pandas, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>             x <span class="op">=</span> <span class="st">'EMPLOYMENT_TYPE_NAME'</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>             y <span class="op">=</span> <span class="st">'SALARY'</span>, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>             title <span class="op">=</span> <span class="st">'Salary Distribution by Employment Type'</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>             labels <span class="op">=</span> {<span class="st">'EMPLOYMENT_TYPE_NAME'</span>: </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'Employment Type'</span>, <span class="st">'SALARY'</span>: <span class="st">'Salary'</span>},</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">'EMPLOYMENT_TYPE_NAME'</span>, </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>             template<span class="op">=</span> <span class="st">"simple_white"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>             color_discrete_sequence <span class="op">=</span> px.colors.qualitative.Set2)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">16</span>),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        tickmode <span class="op">=</span> <span class="st">'array'</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        tickvals <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>],</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        ticktext <span class="op">=</span> [<span class="st">'Mixed'</span>, <span class="st">'Full-Time (&gt; 32 hr)'</span>, <span class="st">'Part-Time (≤ 32 hr)'</span>]),</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    yaxis_title <span class="op">=</span> <span class="st">'Salary'</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    plot_bgcolor <span class="op">=</span> <span class="st">'white'</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'lightgray'</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure1.svg"</span>, width <span class="op">=</span> <span class="dv">1000</span>, height <span class="op">=</span> <span class="dv">500</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-6-output-2.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure1.svg">Salary Distribution by Employment Type</a></p>
+<p>The box plot shows salary distributions across different employment types. It highlights that Full-Time jobs have the highest median salary and a wider interquartile range (IQR), indicating higher salaries and greater variability in earnings. The presence of outliers suggests that some positions in this category offer exceptionally high salaries.</p>
+<p>In addition, Part-Time salaries are generally lower, with a lower median and a tighter IQR, indicating less variability. Finally, Mixed employment type falls between the two, showing moderate salary dispersion. This analysis suggests that full-time jobs generally offer higher pay than part-time roles, but salaries within each category still vary significantly.</p>
+</section>
+<section id="salary-distribution-by-industry" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Salary Distribution by Industry</h1>
+<ul>
+<li>Compare salary variations across industries.</li>
+<li><strong>Filter the dataset</strong>
+<ul>
+<li>Keep records where <strong>salary is greater than zero</strong>.</li>
+</ul></li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Group by <strong>NAICS industry codes</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>box plot</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>NAICS2_NAME</code></li>
+<li><strong>Y-axis</strong> = <code>SALARY</code></li>
+</ul></li>
+<li>Customize colors, fonts, and styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-12" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>salary_by_NAICS <span class="op">=</span> filtered_df.groupBy(<span class="st">'NAICS2_NAME'</span>).agg(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    F.<span class="bu">min</span>(<span class="st">'SALARY'</span>).alias(<span class="st">'min_salary'</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    F.<span class="bu">max</span>(<span class="st">'SALARY'</span>).alias(<span class="st">'max_salary'</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    F.avg(<span class="st">'SALARY'</span>).alias(<span class="st">'avg_salary'</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    F.expr(<span class="st">'percentile_approx(SALARY, 0.5)'</span>).alias(<span class="st">'median_salary'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>salary_by_NAICS.show(<span class="dv">30</span>, truncate <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 9:&gt;                                                          (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+------------------------------------------------------------------------+----------+----------+------------------+-------------+
+|NAICS2_NAME                                                             |min_salary|max_salary|avg_salary        |median_salary|
++------------------------------------------------------------------------+----------+----------+------------------+-------------+
+|Administrative and Support and Waste Management and Remediation Services|27040     |500000    |102942.47729618163|99840        |
+|Public Administration                                                   |31150     |253150    |83252.96718972895 |79250        |
+|Real Estate and Rental and Leasing                                      |28080     |260000    |91487.53775743707 |81464        |
+|Information                                                             |27040     |500000    |140151.23053501523|133000       |
+|Unclassified Industry                                                   |15860     |372500    |108793.61641493303|105000       |
+|Accommodation and Food Services                                         |20800     |338750    |145674.50191570882|149850       |
+|Finance and Insurance                                                   |31200     |311000    |119854.02180851063|117937       |
+|Construction                                                            |31387     |194500    |115134.3485915493 |117500       |
+|Utilities                                                               |39020     |234000    |118188.44025157233|114950       |
+|Management of Companies and Enterprises                                 |49920     |295000    |107347.15         |101400       |
+|Professional, Scientific, and Technical Services                        |23585     |312500    |132599.58766559057|130000       |
+|Arts, Entertainment, and Recreation                                     |33176     |180000    |91034.79069767441 |76837        |
+|Other Services (except Public Administration)                           |27040     |250000    |91423.89944134078 |85000        |
+|Transportation and Warehousing                                          |27300     |195000    |100463.8986784141 |100000       |
+|Wholesale Trade                                                         |31200     |350000    |110030.41216216216|100000       |
+|Agriculture, Forestry, Fishing and Hunting                              |52800     |222000    |98591.85714285714 |84000        |
+|Manufacturing                                                           |26520     |319100    |122423.95072115384|121300       |
+|Mining, Quarrying, and Oil and Gas Extraction                           |49920     |185750    |103722.86111111111|100500       |
+|Educational Services                                                    |22440     |262250    |80582.0973084886  |75926        |
+|Health Care and Social Assistance                                       |20583     |455375    |101279.11927981995|98000        |
+|Retail Trade                                                            |21237     |437500    |124757.09685863875|119850       |
++------------------------------------------------------------------------+----------+----------+------------------+-------------+
+</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_pandas_NAICS <span class="op">=</span> filtered_df.select(<span class="st">'NAICS2_NAME'</span>, <span class="st">'SALARY'</span>).toPandas()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>industry_mapping <span class="op">=</span> {</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Retail Trade"</span>: <span class="st">"Retail"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Administrative and Support and Waste Management and Remediation Services"</span>: <span class="st">"Admin &amp; Waste Mgmt"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Finance and Insurance"</span>: <span class="st">"Finance &amp; Insurance"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Unclassified Industry"</span>: <span class="st">"Unclassified"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Information"</span>: <span class="st">"Information"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Manufacturing"</span>: <span class="st">"Manufacturing"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Professional, Scientific, and Technical Services"</span>: <span class="st">"Professional Services"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wholesale Trade"</span>: <span class="st">"Wholesale"</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Educational Services"</span>: <span class="st">"Education"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Health Care and Social Assistance"</span>: <span class="st">"Health &amp; Social"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Public Administration"</span>: <span class="st">"Public Admin"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Construction"</span>: <span class="st">"Construction"</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Transportation and Warehousing"</span>: <span class="st">"Transport &amp; Warehousing"</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Real Estate and Rental and Leasing"</span>: <span class="st">"Real Estate &amp; Lease"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Accommodation and Food Services"</span>: <span class="st">"Hospitality"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Other Services (except Public Administration)"</span>: <span class="st">"Other Services"</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Management of Companies and Enterprises"</span>: <span class="st">"Management"</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mining, Quarrying, and Oil and Gas Extraction"</span>: <span class="st">"Mining &amp; Extraction"</span>,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Agriculture, Forestry, Fishing and Hunting"</span>: <span class="st">"Agriculture &amp; Fishing"</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Utilities"</span>: <span class="st">"Utilities"</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arts, Entertainment, and Recreation"</span>: <span class="st">"Arts &amp; Entertainment"</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>df_pandas_NAICS[<span class="st">'NAICS2_NAME'</span>] <span class="op">=</span> df_pandas_NAICS[<span class="st">'NAICS2_NAME'</span>].<span class="bu">map</span>(industry_mapping)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.box(df_pandas_NAICS,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>             x <span class="op">=</span> <span class="st">'NAICS2_NAME'</span>,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>             y <span class="op">=</span> <span class="st">'SALARY'</span>,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">'NAICS2_NAME'</span>,</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>             title <span class="op">=</span> <span class="st">'Salary Distribution by Industry'</span>,</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>             labels <span class="op">=</span> {<span class="st">'NAICS2_NAME'</span>: <span class="st">'Industry'</span>, </span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'SALARY'</span>: <span class="st">'Salary'</span>},</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>             template<span class="op">=</span> <span class="st">"simple_white"</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>             width <span class="op">=</span> <span class="dv">1000</span>, </span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>             height <span class="op">=</span> <span class="dv">600</span>)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">20</span>),</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(text <span class="op">=</span> <span class="st">'Industry'</span>, </span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>                     font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),  </span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>        tickangle <span class="op">=</span> <span class="op">-</span> <span class="dv">45</span>,  </span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,  </span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(text <span class="op">=</span> <span class="st">'Salary'</span>, </span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>                     font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),  </span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,  </span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>    showlegend <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>    plot_bgcolor <span class="op">=</span> <span class="st">'white'</span>,</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'lightgray'</span>)</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure2.svg"</span>, width <span class="op">=</span> <span class="dv">1000</span>, height <span class="op">=</span> <span class="dv">600</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-8-output-2.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure2.svg">Salary Distribution by Industry</a></p>
+<p>The box plot indicates that industries such as Accommodation and Food Services and Information tend to have higher median salaries and wider salary distributions, suggesting greater earning potential and variability. In contrast, industries like Public Administration, Educational Services, and Arts &amp; Entertainment show lower median salaries with a more compressed range, implying more consistency in lower wages.</p>
+<p>Moreover, certain industries, such as Health Care and Social Assistance and Admin &amp; Waste Mgmt, show a high number of outliers, suggesting the presence of highly paid roles. However, other industies like Mining, Quarrying, and Oil and Gas Extraction have more compact distributions, indicating more standardized salary ranges. The Unclassified category has a broad salary spread, likely due to its diverse job postings.</p>
+</section>
+<section id="job-posting-trends-over-time" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Job Posting Trends Over Time</h1>
+<ul>
+<li>Analyze how job postings fluctuate over time.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Count job postings per <strong>posted date (<code>POSTED</code>)</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>line chart</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>POSTED</code></li>
+<li><strong>Y-axis</strong> = <code>Number of Job Postings</code></li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-17" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df_to_date <span class="op">=</span> df.withColumn(<span class="st">'POSTED'</span>, to_date(col(<span class="st">'POSTED'</span>)))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>job_trends <span class="op">=</span> df_to_date.groupBy(<span class="st">'POSTED'</span>).agg(count(<span class="st">'*'</span>).alias(<span class="st">'num_postings'</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>job_trends.show(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 13:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+----------+------------+
+|    POSTED|num_postings|
++----------+------------+
+|2024-09-18|         700|
+|2024-05-30|         517|
+|2024-06-12|         708|
+|2024-08-27|         629|
+|2024-06-04|         453|
++----------+------------+
+only showing top 5 rows
+</code></pre>
+</div>
+</div>
+<div id="cell-18" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>job_trends_pd <span class="op">=</span> job_trends.toPandas().sort_values(<span class="st">'POSTED'</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.line(job_trends_pd, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>              x <span class="op">=</span> <span class="st">'POSTED'</span>, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>              y <span class="op">=</span> <span class="st">'num_postings'</span>, </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>              title <span class="op">=</span> <span class="st">'Job Posting Trends Over Time'</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>              labels <span class="op">=</span> {<span class="st">'POSTED'</span>: <span class="st">'Date'</span>, </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'num_postings'</span>: <span class="st">'Number of Job Postings'</span>},</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>              line_shape <span class="op">=</span> <span class="st">'linear'</span>, </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>              color_discrete_sequence <span class="op">=</span> [<span class="st">"#1d6ef3"</span>],</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>              markers <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>              width <span class="op">=</span> <span class="dv">1000</span>, </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>              height <span class="op">=</span> <span class="dv">500</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">20</span>),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(text <span class="op">=</span> <span class="st">'Month'</span>, </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                     font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        tickformat <span class="op">=</span> <span class="st">'%b %Y'</span>,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),  </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        dtick <span class="op">=</span> <span class="st">'M1'</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        tickangle <span class="op">=</span> <span class="op">-</span><span class="dv">30</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>),</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(text <span class="op">=</span> <span class="st">'Number of Job Postings'</span>, </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>                     font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),                     </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>        gridcolor <span class="op">=</span> <span class="st">'lightgray'</span>),</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    plot_bgcolor <span class="op">=</span> <span class="st">'white'</span>,</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'lightgray'</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure3.svg"</span>, width <span class="op">=</span> <span class="dv">1000</span>, height <span class="op">=</span> <span class="dv">500</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-10-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure3.svg">Job Posting Trends Over Time</a></p>
+<p>This graph shows that the number of job postings varies significantly over time, with frequent peaks and valleys. This suggests seasonal or cyclical hiring trends, possibly influenced by industry demands or economic factors. In addition, a noticeable peak in June 2024 indicates a surge in job postings, which could be due to companies ramping up hiring before the summer.</p>
+</section>
+<section id="top-10-job-titles-by-count" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Top 10 Job Titles by Count</h1>
+<ul>
+<li>Identify the most frequently posted job titles.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Count the occurrences of each <strong>job title (<code>TITLE_NAME</code>)</strong>.</li>
+<li>Select the <strong>top 10 most frequent titles</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>bar chart</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>TITLE_NAME</code></li>
+<li><strong>Y-axis</strong> = <code>Job Count</code></li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-22" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.createOrReplaceTempView(<span class="st">"jobs"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>top_job_titles <span class="op">=</span> spark.sql(<span class="st">"""</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT TITLE_NAME, COUNT(*) AS job_count</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM jobs</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY TITLE_NAME</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY job_count DESC</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 10</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>top_job_titles.show(truncate <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 19:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+------------------------------+---------+
+|TITLE_NAME                    |job_count|
++------------------------------+---------+
+|Data Analysts                 |8593     |
+|Unclassified                  |3151     |
+|Business Intelligence Analysts|2074     |
+|Enterprise Architects         |1999     |
+|Oracle Cloud HCM Consultants  |1042     |
+|Data Modelers                 |668      |
+|Data Governance Analysts      |629      |
+|Data Analytics Engineers      |537      |
+|ERP Business Analysts         |488      |
+|Data Quality Analysts         |467      |
++------------------------------+---------+
+</code></pre>
+</div>
+</div>
+<div id="cell-23" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>top_job_titles_pd <span class="op">=</span> top_job_titles.toPandas()</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.bar(top_job_titles_pd, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>             x <span class="op">=</span> <span class="st">'TITLE_NAME'</span>, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>             y <span class="op">=</span> <span class="st">'job_count'</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>             title <span class="op">=</span> <span class="st">'Top 10 Job Titles by Count'</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>             labels <span class="op">=</span> {<span class="st">'TITLE_NAME'</span>: <span class="st">'Job Title'</span>, </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'job_count'</span>: <span class="st">'Job Count'</span>},</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">'job_count'</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>             color_continuous_scale <span class="op">=</span> <span class="st">'Viridis'</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>             width <span class="op">=</span> <span class="dv">900</span>, </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>             height <span class="op">=</span> <span class="dv">650</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">20</span>),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),  </span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>        tickangle <span class="op">=</span> <span class="op">-</span><span class="dv">40</span>),</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">14</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    plot_bgcolor <span class="op">=</span> <span class="st">'lightgrey'</span>,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'white'</span>)</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure4.svg"</span>, width <span class="op">=</span> <span class="dv">900</span>, height <span class="op">=</span> <span class="dv">650</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure4.svg">Top 10 Job Titles by Count</a></p>
+<p>The bar chart shows that Data Analysts are the most frequently posted job title, indicating a strong demand for data professionals. The presence of multiple data-related roles such as Business Intelligence Analysts, Data Modelers, and Data Governance Analysts suggests that companies are prioritizing data-driven decision-making.</p>
+<p>Additionally, the Unclassified category, with 3,151 postings, may indicate job postings with missing or non-standardized titles. Specialized roles like Oracle Cloud HCM Consultants and Enterprise Architects also appear in the top 10, reflecting demand for expertise in enterprise systems and cloud solutions.</p>
+</section>
+<section id="remote-vs-on-site-job-postings" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Remote vs On-Site Job Postings</h1>
+<ul>
+<li>Compare the proportion of remote and on-site job postings.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Count job postings by <strong>remote type (<code>REMOTE_TYPE_NAME</code>)</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>pie chart</strong> where:
+<ul>
+<li><strong>Labels</strong> = <code>REMOTE_TYPE_NAME</code></li>
+<li><strong>Values</strong> = <code>Job Count</code></li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-27" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>remote_type <span class="op">=</span> df.groupBy(<span class="st">'REMOTE_TYPE_NAME'</span>).agg(count(<span class="st">'*'</span>).alias(<span class="st">'job_count'</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>remote_type <span class="op">=</span> remote_type.na.replace({<span class="st">'[None]'</span>: <span class="st">'On-site'</span>}, subset<span class="op">=</span>[<span class="st">'REMOTE_TYPE_NAME'</span>])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>remote_type_pd <span class="op">=</span> remote_type.toPandas()</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>remote_type.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 32:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+----------------+---------+
+|REMOTE_TYPE_NAME|job_count|
++----------------+---------+
+|          Remote|    12499|
+|         On-site|    56584|
+|      Not Remote|     1133|
+|   Hybrid Remote|     2260|
++----------------+---------+
+</code></pre>
+</div>
+</div>
+<div id="cell-28" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.pie(remote_type_pd, </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>             names <span class="op">=</span> <span class="st">'REMOTE_TYPE_NAME'</span>, </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>             values <span class="op">=</span> <span class="st">"job_count"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>             title <span class="op">=</span> <span class="st">"Remote vs. On-Site Job Postings"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>             template<span class="op">=</span> <span class="st">"simple_white"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>             color_discrete_sequence <span class="op">=</span> px.colors.qualitative.Pastel,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>             hole <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>             width <span class="op">=</span> <span class="dv">800</span>, </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>             height <span class="op">=</span> <span class="dv">500</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">20</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    legend_title_text <span class="op">=</span> <span class="st">'Job Type'</span>,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    legend <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">16</span>)))</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure5.svg"</span>, width <span class="op">=</span> <span class="dv">800</span>, height <span class="op">=</span> <span class="dv">500</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-14-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure5.svg">Remote vs.&nbsp;On-Site Job Postings</a></p>
+<p>The pie chart shows that the most common job type is on-site work, with remote and hybrid jobs making up smaller portions. The majority of job postings shows that most companies are still requiring employees to work on-site. The slice for on-site jobs would dominate the pie chart, making up the largest portion. On the other hand, the “Not Remote” category likely refers to jobs that do not offer remote work options, but they may not strictly be on-site jobs (they could be in-person with specific constraints). This slice would be quite small, indicating that a limited number of job postings fall into this category.</p>
+</section>
+<section id="skill-demand-analysis-by-industry-stacked-bar-chart" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Skill Demand Analysis by Industry (Stacked Bar Chart)</h1>
+<ul>
+<li>Identify which skills are most in demand in various industries.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Extract <strong>skills</strong> from job postings.</li>
+<li>Count occurrences of skills grouped by <strong>NAICS industry codes</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>stacked bar chart</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>Industry</code></li>
+<li><strong>Y-axis</strong> = <code>Skill Count</code></li>
+<li><strong>Color</strong> = <code>Skill</code></li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-32" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>skills_by_industry <span class="op">=</span> df.withColumn(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SKILLS_NAME'</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    regexp_replace(col(<span class="st">'SKILLS_NAME'</span>), <span class="vs">r'[\[\]\n"]'</span>, <span class="st">''</span>))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>skills_by_industry <span class="op">=</span> skills_by_industry.withColumn(<span class="st">'SKILLS_NAME'</span>, explode(split(col(<span class="st">'SKILLS_NAME'</span>), <span class="st">","</span>)))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>skills_by_industry <span class="op">=</span> skills_by_industry.withColumn(<span class="st">'SKILLS_NAME'</span>, trim(col(<span class="st">'SKILLS_NAME'</span>)))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>skill_counts <span class="op">=</span> skills_by_industry.groupBy(<span class="st">'NAICS2_NAME'</span>, <span class="st">'SKILLS_NAME'</span>).agg(count(<span class="st">'*'</span>).alias(<span class="st">'skill_count'</span>))</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>skill_counts.show(<span class="dv">10</span>, truncate<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 35:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+------------------------------------------------------------------------+---------------------------------------+-----------+
+|NAICS2_NAME                                                             |SKILLS_NAME                            |skill_count|
++------------------------------------------------------------------------+---------------------------------------+-----------+
+|Unclassified Industry                                                   |JavaScript (Programming Language)      |230        |
+|Wholesale Trade                                                         |Test Data                              |8          |
+|Educational Services                                                    |Master Of Business Administration (MBA)|25         |
+|Professional, Scientific, and Technical Services                        |Workforce Management                   |107        |
+|Information                                                             |Communication                          |1910       |
+|Finance and Insurance                                                   |Data Lineage                           |180        |
+|Retail Trade                                                            |Construction                           |6          |
+|Administrative and Support and Waste Management and Remediation Services|Test Script                            |20         |
+|Unclassified Industry                                                   |Amazon Web Services                    |604        |
+|Administrative and Support and Waste Management and Remediation Services|Statistics                             |745        |
++------------------------------------------------------------------------+---------------------------------------+-----------+
+only showing top 10 rows
+</code></pre>
+</div>
+</div>
+<div id="cell-33" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>skill_counts_pd <span class="op">=</span> skill_counts.toPandas()</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>industry_mapping <span class="op">=</span> {</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Retail Trade"</span>: <span class="st">"Retail"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Administrative and Support and Waste Management and Remediation Services"</span>: <span class="st">"Admin &amp; Waste Mgmt"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Finance and Insurance"</span>: <span class="st">"Finance &amp; Insurance"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Unclassified Industry"</span>: <span class="st">"Unclassified"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Information"</span>: <span class="st">"Information"</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Manufacturing"</span>: <span class="st">"Manufacturing"</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Professional, Scientific, and Technical Services"</span>: <span class="st">"Professional Services"</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wholesale Trade"</span>: <span class="st">"Wholesale"</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Educational Services"</span>: <span class="st">"Education"</span>,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Health Care and Social Assistance"</span>: <span class="st">"Health &amp; Social"</span>,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Public Administration"</span>: <span class="st">"Public Admin"</span>,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Construction"</span>: <span class="st">"Construction"</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Transportation and Warehousing"</span>: <span class="st">"Transport &amp; Warehousing"</span>,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Real Estate and Rental and Leasing"</span>: <span class="st">"Real Estate &amp; Lease"</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Accommodation and Food Services"</span>: <span class="st">"Hospitality"</span>,</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Other Services (except Public Administration)"</span>: <span class="st">"Other Services"</span>,</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Management of Companies and Enterprises"</span>: <span class="st">"Management"</span>,</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mining, Quarrying, and Oil and Gas Extraction"</span>: <span class="st">"Mining &amp; Extraction"</span>,</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Agriculture, Forestry, Fishing and Hunting"</span>: <span class="st">"Agriculture &amp; Fishing"</span>,</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Utilities"</span>: <span class="st">"Utilities"</span>,</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arts, Entertainment, and Recreation"</span>: <span class="st">"Arts &amp; Entertainment"</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>skill_counts_pd[<span class="st">'NAICS2_NAME'</span>] <span class="op">=</span> skill_counts_pd[<span class="st">'NAICS2_NAME'</span>].<span class="bu">map</span>(industry_mapping)</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>top_n_skills <span class="op">=</span> <span class="dv">10</span>  </span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>top_skills <span class="op">=</span> skill_counts_pd.groupby(<span class="st">'SKILLS_NAME'</span>)[<span class="st">'skill_count'</span>].<span class="bu">sum</span>().nlargest(top_n_skills).index</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>skill_counts_top10 <span class="op">=</span> skill_counts_pd[skill_counts_pd[<span class="st">'SKILLS_NAME'</span>].isin(top_skills)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+</div>
+<div id="cell-34" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.bar(skill_counts_top10,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>             x <span class="op">=</span> <span class="st">'NAICS2_NAME'</span>,  </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>             y <span class="op">=</span> <span class="st">'skill_count'</span>, </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">'SKILLS_NAME'</span>, </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>             title <span class="op">=</span> <span class="st">'Skill Demand by Industry'</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>             labels <span class="op">=</span> {<span class="st">'NAICS2_NAME'</span>: <span class="st">'Industry'</span>, </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'skill_count'</span>: <span class="st">"Skill Count"</span>, </span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'SKILLS_NAME'</span>: <span class="st">'Skill'</span>},</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>            width <span class="op">=</span> <span class="dv">1100</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>            height <span class="op">=</span> <span class="dv">650</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">16</span>),</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">16</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),  </span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>        tickangle <span class="op">=</span> <span class="op">-</span><span class="dv">40</span>,</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">16</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    legend_title <span class="op">=</span> <span class="st">'Skills'</span>,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'white'</span>)</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure6.svg"</span>, width <span class="op">=</span> <span class="dv">1100</span>, height <span class="op">=</span> <span class="dv">650</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-17-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure6.svg">Skill Demand by Industry</a></p>
+<p>This barplot shows that skill demand varies significantly across industries. For example, the Professional, Scientific, and Technical Services sector shows the highest demand for the top 10 skills, indicating that this industry places a premium on a diverse and comprehensive skill set. However, industries like Arts, Entertainment, and Recreation show the least demand for these top skills, which may suggest a more specialized skill set or potentially a slower pace of digital transformation within these sectors.</p>
+<p>Communication, Management, and Data Analysis consistently appear across nearly all industries, reinforcing their status as highly transferable and in-demand skills. These skills are likely essential across various roles and sectors, contributing to their widespread recognition.</p>
+</section>
+<section id="salary-analysis-by-onet-occupation-type-bubble-chart" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Salary Analysis by ONET Occupation Type (Bubble Chart)</h1>
+<ul>
+<li>Analyze how salaries differ across ONET occupation types.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Compute <strong>median salary</strong> for each occupation in the <strong>ONET taxonomy</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>bubble chart</strong> where:
+<ul>
+<li><strong>X-axis</strong> = <code>ONET_NAME</code></li>
+<li><strong>Y-axis</strong> = <code>Median Salary</code></li>
+<li><strong>Size</strong> = Number of job postings</li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-38" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>median_salary <span class="op">=</span> spark.sql(<span class="st">"""</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT </span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="st">        TITLE_NAME AS ONET_NAME, </span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="st">        percentile_approx(SALARY, 0.5) AS Median_Salary,</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="st">        COUNT(*) AS Job_Postings</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM jobs</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY TITLE_NAME</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY Job_Postings DESC</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 10</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>median_salary.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 41:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+--------------------+-------------+------------+
+|           ONET_NAME|Median_Salary|Job_Postings|
++--------------------+-------------+------------+
+|       Data Analysts|        90000|        8593|
+|        Unclassified|       120640|        3151|
+|Business Intellig...|        99911|        2074|
+|Enterprise Archit...|       155090|        1999|
+|Oracle Cloud HCM ...|       150500|        1042|
+|       Data Modelers|       135550|         668|
+|Data Governance A...|       114400|         629|
+|Data Analytics En...|       188867|         537|
+|ERP Business Anal...|       113520|         488|
+|Data Quality Anal...|       101875|         467|
++--------------------+-------------+------------+
+</code></pre>
+</div>
+</div>
+<div id="cell-39" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>median_salary_pd <span class="op">=</span> median_salary.toPandas()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter(median_salary_pd, </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                 x <span class="op">=</span> <span class="st">'ONET_NAME'</span>, </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                 y <span class="op">=</span> <span class="st">'Median_Salary'</span>, </span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                 size <span class="op">=</span> <span class="st">'Job_Postings'</span>, </span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                 color <span class="op">=</span> <span class="st">'Job_Postings'</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                 hover_name <span class="op">=</span> <span class="st">'ONET_NAME'</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                 title <span class="op">=</span> <span class="st">'Salary Analysis by ONET Occupation Type'</span>,</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>                 labels <span class="op">=</span> {<span class="st">'ONET_NAME'</span>: <span class="st">'Occupation Type'</span>, </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Median_Salary'</span>: <span class="st">'Median Salary (USD)'</span>, </span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Job_Postings'</span>: <span class="st">'Number of Job Postings'</span>},</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                 width <span class="op">=</span> <span class="dv">1100</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                 height <span class="op">=</span> <span class="dv">650</span>,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                 size_max <span class="op">=</span> <span class="dv">70</span>,</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>                 color_continuous_scale <span class="op">=</span> <span class="st">'Plasma'</span>)</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">16</span>),</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    xaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">16</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),  </span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>        tickangle <span class="op">=</span> <span class="op">-</span><span class="dv">40</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="bu">dict</span>(font <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">18</span>, family <span class="op">=</span> <span class="st">'Arial'</span>)),</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>        tickfont <span class="op">=</span> <span class="bu">dict</span>(size <span class="op">=</span> <span class="dv">16</span>, family <span class="op">=</span> <span class="st">'Arial'</span>),</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>        showline <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>        linecolor <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>        linewidth <span class="op">=</span> <span class="dv">1</span>),</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'white'</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure7.svg"</span>, width <span class="op">=</span> <span class="dv">1100</span>, height <span class="op">=</span> <span class="dv">650</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-19-output-2.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure7.svg">Salary Analysis by ONET Occupation Type</a></p>
+<p>The bubble chart shows that Data Analysts account for the highest number of job postings, but their median salary is relatively lower than other ONET occupation categories. In contrast, Data Analytics Engineers have the highest median salaries, but job postings reflect that demand for these roles remains relatively low. The Unclassified category stands out with both a high volume of postings and a strong median salary, indicating that a substantial portion of job listings may not be directly associated with specific ONET occupations and require further understanding.</p>
+</section>
+<section id="career-pathway-trends-sankey-diagram" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Career Pathway Trends (Sankey Diagram)</h1>
+<ul>
+<li>Visualize job transitions between different occupation levels.</li>
+<li><strong>Aggregate Data</strong>
+<ul>
+<li>Identify career transitions between <strong>SOC job classifications</strong>.</li>
+</ul></li>
+<li><strong>Visualize results</strong>
+<ul>
+<li>Create a <strong>Sankey diagram</strong> where:
+<ul>
+<li><strong>Source</strong> = <code>SOC_2021_2_NAME</code></li>
+<li><strong>Target</strong> = <code>SOC_2021_3_NAME</code></li>
+<li><strong>Value</strong> = Number of transitions</li>
+</ul></li>
+<li>Apply custom colors and font styles.</li>
+</ul></li>
+<li><strong>Explanation:</strong> Write two sentences about what the graph reveals.</li>
+</ul>
+<div id="cell-43" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>transition_df <span class="op">=</span> df.groupBy(<span class="st">'SOC_2021_2_NAME'</span>, <span class="st">'SOC_2021_3_NAME'</span>).agg(F.count(<span class="st">'*'</span>).alias(<span class="st">'num_transitions'</span>))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>transition_df.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 47:&gt;                                                         (0 + 1) / 1]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+--------------------+--------------------+---------------+
+|     SOC_2021_2_NAME|     SOC_2021_3_NAME|num_transitions|
++--------------------+--------------------+---------------+
+|Computer and Math...|Mathematical Scie...|          72476|
++--------------------+--------------------+---------------+
+</code></pre>
+</div>
+</div>
+<div id="cell-44" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>transition_pd <span class="op">=</span> transition_df.toPandas()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>all_labels <span class="op">=</span> <span class="bu">list</span>(<span class="bu">set</span>(transition_pd[<span class="st">'SOC_2021_2_NAME'</span>].unique()) <span class="op">|</span> <span class="bu">set</span>(transition_pd[<span class="st">'SOC_2021_3_NAME'</span>].unique()))</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>label_dict <span class="op">=</span> {label: i <span class="cf">for</span> i, label <span class="kw">in</span> <span class="bu">enumerate</span>(all_labels)}</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>transition_pd[<span class="st">'source_index'</span>] <span class="op">=</span> transition_pd[<span class="st">'SOC_2021_2_NAME'</span>].<span class="bu">map</span>(label_dict)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>transition_pd[<span class="st">'target_index'</span>] <span class="op">=</span> transition_pd[<span class="st">'SOC_2021_3_NAME'</span>].<span class="bu">map</span>(label_dict)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(go.Sankey(</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    node <span class="op">=</span> <span class="bu">dict</span>(pad <span class="op">=</span> <span class="dv">15</span>,</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>                thickness <span class="op">=</span> <span class="dv">20</span>,</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>                line<span class="op">=</span><span class="bu">dict</span>(color <span class="op">=</span> <span class="st">'black'</span>, width <span class="op">=</span> <span class="fl">0.5</span>),</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>                label <span class="op">=</span> all_labels,</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>                color <span class="op">=</span> <span class="st">'lightblue'</span>),</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>    link <span class="op">=</span> <span class="bu">dict</span>(source<span class="op">=</span>transition_pd[<span class="st">'source_index'</span>],</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>                target<span class="op">=</span>transition_pd[<span class="st">'target_index'</span>],</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>                value<span class="op">=</span>transition_pd[<span class="st">'num_transitions'</span>],</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span> <span class="st">'orange'</span>)))</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>    font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">16</span>),</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Career Pathway Trends: Job Transitions'</span>,</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>    title_font <span class="op">=</span> <span class="bu">dict</span>(family <span class="op">=</span> <span class="st">'Arial'</span>, size <span class="op">=</span> <span class="dv">20</span>),</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>    paper_bgcolor <span class="op">=</span> <span class="st">'white'</span>)</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>fig.write_image(<span class="st">"output/figure8.svg"</span>, width <span class="op">=</span> <span class="dv">1000</span>, height <span class="op">=</span> <span class="dv">600</span>, scale <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab06_FurongWang_files/figure-html/cell-21-output-2.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="output/figure8.svg">Career Pathway Trends: Job Transitions</a></p>
+<p>The Sankey diagram highlights a notable career transition from Computer and Mathematical Occupations to Mathematical Science Occupations, suggesting a significant pathway between these fields. This reflects a strong overlap, indicating that individuals in computing roles may easily transition into mathematical science positions, showcasing mobility and flexibility across related disciplines.</p>
+<p>However, the diagram shows only a single transition between these two occupation groups, implying that the current dataset captures a limited career pathway—possibly focusing on transitions within fields like data science or analytics. This may also suggest that other potential occupation transitions were either not recorded or unavailable in the dataset.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
