@@ -110,8 +110,10 @@ fig.update_layout(
     paper_bgcolor = 'lightgray')
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure1.svg", width = 1000, height = 500, scale = 1)
 ```
+
+[Salary Distribution by Employment Type](output/figure1.svg)
 
 The box plot shows salary distributions across different employment types. It highlights that Full-Time jobs have the highest median salary and a wider interquartile range (IQR), indicating higher salaries and greater variability in earnings. The presence of outliers suggests that some positions in this category offer exceptionally high salaries. 
 
@@ -200,8 +202,10 @@ fig.update_layout(
     paper_bgcolor = 'lightgray')
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure2.svg", width = 1000, height = 600, scale = 1)
 ```
+
+[Salary Distribution by Industry](output/figure2.svg)
 
 The box plot indicates that industries such as Accommodation and Food Services and Information tend to have higher median salaries and wider salary distributions, suggesting greater earning potential and variability. In contrast, industries like Public Administration, Educational Services, and Arts & Entertainment show lower median salaries with a more compressed range, implying more consistency in lower wages. 
 
@@ -265,8 +269,10 @@ fig.update_layout(
 )
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure3.svg", width = 1000, height = 500, scale = 1)
 ```
+
+[Job Posting Trends Over Time](output/figure3.svg)
 
 This graph shows that the number of job postings varies significantly over time, with frequent peaks and valleys. This suggests seasonal or cyclical hiring trends, possibly influenced by industry demands or economic factors. In addition, a noticeable peak in June 2024 indicates a surge in job postings, which could be due to companies ramping up hiring before the summer. 
 
@@ -321,8 +327,10 @@ fig.update_layout(
     paper_bgcolor = 'white')
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure4.svg", width = 900, height = 650, scale = 1)
 ```
+
+[Top 10 Job Titles by Count](output/figure4.svg)
 
 The bar chart shows that Data Analysts are the most frequently posted job title, indicating a strong demand for data professionals. The presence of multiple data-related roles such as Business Intelligence Analysts, Data Modelers, and Data Governance Analysts suggests that companies are prioritizing data-driven decision-making.
 
@@ -364,8 +372,10 @@ fig.update_layout(
     legend = dict(font = dict(size = 16)))
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure5.svg", width = 800, height = 500, scale = 1)
 ```
+
+[Remote vs. On-Site Job Postings](output/figure5.svg)
 
 The pie chart shows that the most common job type is on-site work, with remote and hybrid jobs making up smaller portions. The majority of job postings shows that most companies are still requiring employees to work on-site. The slice for on-site jobs would dominate the pie chart, making up the largest portion. On the other hand, the "Not Remote" category likely refers to jobs that do not offer remote work options, but they may not strictly be on-site jobs (they could be in-person with specific constraints). This slice would be quite small, indicating that a limited number of job postings fall into this category.
 
@@ -460,8 +470,10 @@ fig.update_layout(
     paper_bgcolor = 'white')
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure6.svg", width = 1100, height = 650, scale = 1)
 ```
+
+[Skill Demand by Industry](output/figure6.svg)
 
 This barplot shows that skill demand varies significantly across industries. For example, the Professional, Scientific, and Technical Services sector shows the highest demand for the top 10 skills, indicating that this industry places a premium on a diverse and comprehensive skill set. However,  industries like Arts, Entertainment, and Recreation show the least demand for these top skills, which may suggest a more specialized skill set or potentially a slower pace of digital transformation within these sectors.
 
@@ -532,8 +544,10 @@ fig.update_layout(
 )
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure7.svg", width = 1100, height = 650, scale = 1)
 ```
+
+[Salary Analysis by ONET Occupation Type](output/figure7.svg)
 
 The bubble chart shows that Data Analysts account for the highest number of job postings, but their median salary is relatively lower than other ONET occupation categories. In contrast, Data Analytics Engineers have the highest median salaries, but job postings reflect that demand for these roles remains relatively low. The Unclassified category stands out with both a high volume of postings and a strong median salary, indicating that a substantial portion of job listings may not be directly associated with specific ONET occupations and require further understanding.
 
@@ -583,8 +597,10 @@ fig.update_layout(
     paper_bgcolor = 'white')
 
 fig.show()
-HTML(to_html(fig, include_plotlyjs='cdn'))
+fig.write_image("output/figure8.svg", width = 1000, height = 600, scale = 1)
 ```
+
+[Career Pathway Trends: Job Transitions](output/figure8.svg)
 
 The Sankey diagram highlights a notable career transition from Computer and Mathematical Occupations to Mathematical Science Occupations, suggesting a significant pathway between these fields. This reflects a strong overlap, indicating that individuals in computing roles may easily transition into mathematical science positions, showcasing mobility and flexibility across related disciplines.
 
